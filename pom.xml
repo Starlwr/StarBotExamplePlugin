@@ -47,6 +47,14 @@
         <java.version>17</java.version>
     </properties>
 
+    <!-- StarBot Maven 仓库 -->
+    <repositories>
+        <repository>
+            <id>starbot-maven-repository</id>
+            <url>https://maven.starlwr.com/</url>
+        </repository>
+    </repositories>
+
     <!-- 插件依赖 -->
     <dependencies>
         <!-- StarBot 核心依赖，必需 -->
