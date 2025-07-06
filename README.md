@@ -18,7 +18,7 @@
 1. 克隆本示例项目作为模板创建新项目
 2. 修改 `pom.xml` 中的项目信息, 该信息将于打包时被使用 (groupId, artifactId, version 等)
 3. 修改 `src/main/resources/plugin.json` 中的插件元数据，该信息将在被 StarBot 加载时输出到控制台和日志中
-4. 开发你的插件功能, 开发时可正常使用绝大多数 Spring 注解 (可参考 `StarBotExampleStartEventListener.java` 和 `StarBotExampleDanmuEventListener.java` 示例)
+4. 开发你的插件功能, 开发时可正常使用绝大多数 Spring 注解 (可参考 `StarBotExampleStartEventListener.java`、`StarBotExampleDanmuEventListener.java` 和 `StarBotExampleMeowAdder.java` 示例)
 5. 使用 Maven 构建项目: `mvn clean package`
 6. 将 `target` 中生成的 JAR 文件放入 StarBot 的 `plugins` 目录
 
@@ -34,7 +34,8 @@ starbot-example-plugin/
 │   │   ├── java/
 │   │   │   └── com/example/                               # 插件代码包
 │   │   │       ├── StarBotExampleStartEventListener.java  # 示例功能: 启动事件监听器
-│   │   │       └── StarBotExampleDanmuEventListener.java  # 示例功能: 弹幕监听器
+│   │   │       ├── StarBotExampleDanmuEventListener.java  # 示例功能: 弹幕监听器
+│   │   │       └── StarBotExampleMeowAdder.java           # 示例功能: 推送消息修改器
 │   │   └── resources/
 │   │       └── plugin.json                                # 插件元数据配置文件
 │   └── test/                                              # 测试代码目录

@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 
 /**
+ * 示例 2: 接收 StarBot 事件，收到指定事件后触发自定义逻辑
  * 示例 StarBot 弹幕事件监听器
  * 该监听器会在接收到弹幕事件时打印发送者和内容
  */

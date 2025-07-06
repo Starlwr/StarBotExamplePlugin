@@ -6,6 +6,7 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 
 /**
+ * 示例 1: 主程序启动后触发自定义逻辑
  * 示例 StarBot 启动事件监听器
  * 该监听器会在主程序启动完毕后触发一次
  */
