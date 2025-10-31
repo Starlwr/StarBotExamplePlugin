@@ -57,7 +57,7 @@
 
     <!-- 插件依赖 -->
     <dependencies>
-        <!-- StarBot 核心依赖，必需 -->
+        <!-- StarBot 核心依赖，必需，建议开发时使用最新版本 -->
         <dependency>
             <groupId>com.starlwr</groupId>
             <artifactId>starbot-core</artifactId>
