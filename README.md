@@ -16,11 +16,10 @@
 ## 快速开始
 
 1. 克隆本示例项目作为模板创建新项目
-2. 修改 `pom.xml` 中的项目信息, 该信息将于打包时被使用 (groupId, artifactId, version 等)
-3. 修改 `src/main/resources/plugin.json` 中的插件元数据，该信息将在被 StarBot 加载时输出到控制台和日志中
-4. 开发你的插件功能, 开发时可正常使用绝大多数 Spring 注解 (可参考 `StarBotExampleStartEventListener.java`、`StarBotExampleDanmuEventListener.java` 和 `StarBotExampleMeowAdder.java` 示例)
-5. 使用 Maven 构建项目: `mvn clean package`
-6. 将 `target` 中生成的 JAR 文件放入 StarBot 的 `plugins` 目录
+2. 修改 `pom.xml` 中的项目信息, 该部分信息会作为插件元数据, 在被 StarBot 加载时输出到控制台和日志中 (groupId, artifactId, version, name, description, url, developers 等)
+3. 开发你的插件功能, 开发时可正常使用绝大多数 Spring 注解 (可参考 `StarBotExampleStartEventListener.java`、`StarBotExampleDanmuEventListener.java` 和 `StarBotExampleMeowAdder.java` 示例)
+4. 使用 Maven 构建项目: `mvn clean package`
+5. 将 `target` 中生成的 JAR 文件放入 StarBot 的 `plugins` 目录
 
 ## 项目结构
 
@@ -37,7 +36,6 @@ starbot-example-plugin/
 │   │   │       ├── StarBotExampleDanmuEventListener.java  # 示例功能: 弹幕监听器
 │   │   │       └── StarBotExampleMeowAdder.java           # 示例功能: 推送消息修改器
 │   │   └── resources/
-│   │       └── plugin.json                                # 插件元数据配置文件
 │   └── test/                                              # 测试代码目录
 └── target/                                                # 构建输出目录
     └── starbot-example-plugin-1.0.0.jar                   # 构建后的插件 JAR 文件
@@ -47,15 +45,35 @@ starbot-example-plugin/
 
 ### 插件信息
 
-每个 StarBot 插件都需要在 `src/main/resources/plugin.json` 文件中定义其元数据, 其内容将在被 StarBot 加载时输出到控制台和日志中：
+每个 StarBot 插件都需要在 `pom.xml` 文件中定义其元数据, 其内容将在被 StarBot 加载时输出到控制台和日志中：
 
-```json
-{
-  "name": "示例插件",
-  "author": "作者",
-  "version": "1.0.0",
-  "description": "示例插件描述"
-}
+> 2025-11-22 01:58:39.062  INFO 64528 --- [                main] c.s.bot.core.plugin.StarBotPluginLoader  : 已注册插件 StarBotExamplePlugin v1.0.0 --Author: Example Plugin For StarBot
+
+```xml
+<!-- 组名，通常使用反向域名，必填，与 artifactId 共同构成插件唯一标识 -->
+<groupId>com.example</groupId>
+<!-- 插件 ID，必填，与 groupId 共同构成插件唯一标识 -->
+<artifactId>starbot-example-plugin</artifactId>
+<!-- 插件版本，必填，会在插件加载时输出至 StarBot 日志中 -->
+<version>1.0.0</version>
+<!-- 插件名称，必填，会在插件加载时输出至 StarBot 日志中 -->
+<name>StarBotExamplePlugin</name>
+<!-- 插件描述，必填，会在插件加载时输出至 StarBot 日志中 -->
+<description>Example Plugin For StarBot</description>
+<!-- 插件主页 URL -->
+<url>https://www.example.com</url>
+
+<!-- 插件作者信息 -->
+<developers>
+    <developer>
+        <!-- 插件作者 ID，必填，可与名称保持一致 -->
+        <id>Author</id>
+        <!-- 插件作者名称，必填，会在插件加载时输出至 StarBot 日志中 -->
+        <name>Author</name>
+        <!-- 插件作者邮箱 -->
+        <email>example@example.com</email>
+    </developer>
+</developers>
 ```
 
 ### 打包配置
