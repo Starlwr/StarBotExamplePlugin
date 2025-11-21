@@ -39,7 +39,6 @@ starbot-example-plugin/
 │   │   └── resources/
 │   │       └── plugin.json                                # 插件元数据配置文件
 │   └── test/                                              # 测试代码目录
-├── convert.ps1                                            # 依赖转换脚本, 请不要修改
 └── target/                                                # 构建输出目录
     └── starbot-example-plugin-1.0.0.jar                   # 构建后的插件 JAR 文件
 ```
@@ -61,7 +60,7 @@ starbot-example-plugin/
 
 ### 打包配置
 
-> **注意**: 请不要随意修改 `pom.xml` 的 `<build>` 构建配置部分和 `convert.ps1` 文件，否则可能导致插件无法被 StarBot 加载
+> **注意**: 请不要随意修改 `pom.xml` 的 `<build>` 构建配置部分，否则可能导致插件无法被 StarBot 加载
 
 ### 注意事项
 
@@ -76,7 +75,7 @@ StarBot 插件使用 Maven 进行依赖管理, 插件可以依赖其他第三方
 
 ### 核心依赖
 
-每个 StarBot 插件必须依赖 StarBotCore：
+每个 StarBot 插件必须直接依赖 StarBotCore 或通过依赖其他插件的方式间接依赖 StarBotCore, 建议开发时使用最新版本：
 
 ```xml
 <dependency>

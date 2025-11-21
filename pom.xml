@@ -55,6 +55,14 @@
         </repository>
     </repositories>
 
+    <!-- StarBot Maven 插件仓库 -->
+    <pluginRepositories>
+        <pluginRepository>
+            <id>starbot-maven-plugin-repository</id>
+            <url>https://maven.starlwr.com/</url>
+        </pluginRepository>
+    </pluginRepositories>
+
     <!-- 插件依赖 -->
     <dependencies>
         <!-- StarBot 核心依赖，必需，建议开发时使用最新版本 -->
@@ -84,43 +92,14 @@
         <finalName>${project.artifactId}-${project.version}</finalName>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
+                <groupId>com.starlwr</groupId>
+                <artifactId>starbot-plugin-processor</artifactId>
+                <version>1.0.0</version>
                 <executions>
                     <execution>
-                        <id>list-dependencies</id>
-                        <phase>generate-resources</phase>
                         <goals>
-                            <goal>tree</goal>
+                            <goal>dependency-process</goal>
                         </goals>
-                        <configuration>
-                            <outputFile>${project.build.directory}/dependencies.txt</outputFile>
-                            <appendOutput>false</appendOutput>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>convert-dependencies-to-json</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <executable>powershell</executable>
-                            <arguments>
-                                <argument>-ExecutionPolicy</argument>
-                                <argument>Bypass</argument>
-                                <argument>-NoProfile</argument>
-                                <argument>-NonInteractive</argument>
-                                <argument>-Command</argument>
-                                <argument>${basedir}\convert.ps1</argument>
-                            </arguments>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>
