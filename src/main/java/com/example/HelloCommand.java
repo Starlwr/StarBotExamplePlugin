@@ -1,7 +1,7 @@
 package com.example;
 
+import com.starlwr.bot.core.command.CommandContext;
 import com.starlwr.bot.core.command.StarBotCommand;
-import com.starlwr.bot.core.model.CommandContext;
 import com.starlwr.bot.core.plugin.StarBotComponent;
 
 import java.util.List;
