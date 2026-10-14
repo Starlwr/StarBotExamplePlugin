@@ -116,6 +116,7 @@ starbot-example-plugin/
 | `getAliases()` | 命令别名列表, 默认作为额外的命令唤醒词 | 返回空列表, 无别名 | 返回 `List.of("hello")` |
 | `getDescription()` | 命令简介, 在帮助信息中展示 | 无默认实现, 必须实现 | 返回“向你问好，并带上你的昵称” |
 | `getUsage()` | 命令用法说明, 可描述参数格式, 在帮助信息中展示 | 返回 `getName()` | 沿用默认实现, 返回 `你好` |
+| `getArgumentCount()` | 设置命令所需的文本参数个数, 非负数表示必须恰好具有该数量的参数 | 返回 `-1`, 不限制参数个数, 由命令自行处理 | 返回 `0`, 不接受文本参数 |
 | `getPermission()` | 设置执行命令所需的默认权限, 返回 `CommandPermission`, 可由主程序配置覆盖 | 返回 `CommandPermission.EVERYONE`, 所有人均可使用 | 沿用默认实现 |
 | `getScope()` | 设置命令适用的会话类型, 返回 `CommandScope` | 返回 `CommandScope.ALL`, 群聊和私聊均可使用 | 沿用默认实现 |
 | `isDisableable()` | 设置是否允许通过禁用命令禁用当前命令 | 返回 `true`, 允许禁用; 配置文件中的全局禁用设置不受此限制 | 沿用默认实现 |
@@ -126,7 +127,7 @@ starbot-example-plugin/
 
 主程序可通过 `starbot.core.command.permissions` 按命令 ID 覆盖 `getPermission()` 返回的默认权限, 对所有平台和会话统一生效, 未配置的命令沿用默认权限。例如将 `starbot.example.hello` 配置为 `OWNER`, 即可将示例命令限制为仅主人使用。帮助菜单同步展示覆盖后的可用状态, 命令的会话范围和禁用规则仍然生效。
 
-`isTrigger(...)` 应保持快速且无副作用, 只负责判断触发条件, 实际业务逻辑放在 `execute(...)` 中。权限、会话范围和禁用检查由 StarBot 统一处理, 无需在触发规则中重复判断。
+`isTrigger(...)` 应保持快速且无副作用, 只负责判断触发条件, 实际业务逻辑放在 `execute(...)` 中。权限、会话范围、禁用检查和参数个数由 StarBot 统一处理, 无需在触发规则中重复判断。
 
 命令触发还受 StarBot 主程序的 `starbot.core.command` 配置控制：`prefix` 默认为空字符串, 表示无需前缀; `mention` 默认为 `false`, 表示群聊中无需提及机器人。若配置了前缀或要求提及机器人, 测试“你好”命令时也需要满足这些条件。
 

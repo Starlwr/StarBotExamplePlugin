@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * 示例 4: 注册 StarBot 命令
  * 示例 StarBot 命令
- * 该命令会在各推送平台接收到 “你好” 时触发，并回复 “你好，[昵称]”
+ * 该命令会在各推送平台接收到 “你好” 或 “hello” 时触发，并回复 “你好，[昵称]”
  * 该示例仅重写了 StarBotCommand 接口的部分方法，权限、触发规则等使用接口默认实现，可通过重写对应方法自定义命令行为
  */
 @StarBotComponent // 使用该注解将此类注册为 StarBot 组件，会被 StarBot 扫描并注册至 Spring 容器中
@@ -44,6 +44,14 @@ public class HelloCommand implements StarBotCommand { // 实现 StarBotCommand �
     @Override
     public String getDescription() {
         return "向你问好，并带上你的昵称";
+    }
+
+    /**
+     * 命令所需参数个数，参数自动按空白分隔，非负数表示由 StarBot 统一检查参数个数，数量不符时不会触发命令，如不重写此方法，默认 -1 表示不限制，由命令自行处理
+     */
+    @Override
+    public int getArgumentCount() {
+        return 0; // 此命令不需要参数，“你好 1” 或 “hello 1” 不会触发
     }
 
     /**
