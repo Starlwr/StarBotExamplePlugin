@@ -116,13 +116,15 @@ starbot-example-plugin/
 | `getAliases()` | 命令别名列表, 默认作为额外的命令唤醒词 | 返回空列表, 无别名 | 返回 `List.of("hello")` |
 | `getDescription()` | 命令简介, 在帮助信息中展示 | 无默认实现, 必须实现 | 返回“向你问好，并带上你的昵称” |
 | `getUsage()` | 命令用法说明, 可描述参数格式, 在帮助信息中展示 | 返回 `getName()` | 沿用默认实现, 返回 `你好` |
-| `getPermission()` | 设置执行命令所需权限, 返回 `CommandPermission` | 返回 `CommandPermission.EVERYONE`, 所有人均可使用 | 沿用默认实现 |
+| `getPermission()` | 设置执行命令所需的默认权限, 返回 `CommandPermission`, 可由主程序配置覆盖 | 返回 `CommandPermission.EVERYONE`, 所有人均可使用 | 沿用默认实现 |
 | `getScope()` | 设置命令适用的会话类型, 返回 `CommandScope` | 返回 `CommandScope.ALL`, 群聊和私聊均可使用 | 沿用默认实现 |
 | `isDisableable()` | 设置是否允许通过禁用命令禁用当前命令 | 返回 `true`, 允许禁用; 配置文件中的全局禁用设置不受此限制 | 沿用默认实现 |
 | `isTrigger(CommandContext context)` | 根据命令上下文判断当前消息是否触发命令, 返回 `true` 表示匹配 | 不区分大小写匹配命令名称和别名 | 沿用默认实现, 匹配 `你好` 或 `hello` |
 | `execute(CommandContext context)` | 命令触发并通过策略检查后的执行逻辑, 可读取昵称、参数等信息, 并使用 `context.reply(...)` 回复 | 无默认实现, 必须实现 | 回复“你好，[昵称]” |
 
 `CommandPermission` 可选值为 `EVERYONE` (所有人)、`OWNER` (仅主人) 和 `ADMIN` (主人、当前群群主或管理员, 私聊中仅主人可用), 主人账号由主程序的 `starbot.core.command.owners` 配置。`CommandScope` 可选值为 `ALL` (群聊和私聊)、`GROUP` (仅群聊) 和 `PRIVATE` (仅私聊)。
+
+主程序可通过 `starbot.core.command.permissions` 按命令 ID 覆盖 `getPermission()` 返回的默认权限, 对所有平台和会话统一生效, 未配置的命令沿用默认权限。例如将 `starbot.example.hello` 配置为 `OWNER`, 即可将示例命令限制为仅主人使用。帮助菜单同步展示覆盖后的可用状态, 命令的会话范围和禁用规则仍然生效。
 
 `isTrigger(...)` 应保持快速且无副作用, 只负责判断触发条件, 实际业务逻辑放在 `execute(...)` 中。权限、会话范围和禁用检查由 StarBot 统一处理, 无需在触发规则中重复判断。
 
