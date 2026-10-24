@@ -1,7 +1,6 @@
 .idea/
 target/
 logs/
-EventDebug/
-NetworkDebug/
+debug/
 *.iml
 src/main/resources/application-dev.yml
