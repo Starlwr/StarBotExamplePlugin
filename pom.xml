@@ -111,7 +111,7 @@
                 <artifactId>maven-resources-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>copy-dependencies</id>
+                        <id>copy-plugin-metadata</id>
                         <phase>process-resources</phase>
                         <goals>
                             <goal>copy-resources</goal>
@@ -121,24 +121,15 @@
                             <resources>
                                 <resource>
                                     <directory>${project.build.directory}</directory>
+                                    <includes>
+                                        <include>plugin.json</include>
+                                        <include>dependency.json</include>
+                                    </includes>
                                 </resource>
                             </resources>
                         </configuration>
                     </execution>
                 </executions>
-                <configuration>
-                    <resources>
-                        <resource>
-                            <directory>src/main/resources</directory>
-                            <excludes>
-                                <exclude>application.yml</exclude>
-                                <exclude>application.properties</exclude>
-                                <exclude>application-dev.yml</exclude>
-                                <exclude>application-dev.properties</exclude>
-                            </excludes>
-                        </resource>
-                    </resources>
-                </configuration>
             </plugin>
         </plugins>
     </build>

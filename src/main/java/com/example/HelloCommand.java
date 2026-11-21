@@ -3,6 +3,8 @@ package com.example;
 import com.starlwr.bot.core.command.CommandContext;
 import com.starlwr.bot.core.command.StarBotCommand;
 import com.starlwr.bot.core.plugin.StarBotComponent;
+import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
 import java.util.List;
 
@@ -13,7 +15,14 @@ import java.util.List;
  * 该示例仅重写了 StarBotCommand 接口的部分方法，权限、触发规则等使用接口默认实现，可通过重写对应方法自定义命令行为
  */
 @StarBotComponent // 使用该注解将此类注册为 StarBot 组件，会被 StarBot 扫描并注册至 Spring 容器中
+@RequiredArgsConstructor // 生成构造函数，供 Spring 注入配置类
+@ConditionalOnProperty(name = "starbot.example.hello-enabled", havingValue = "true", matchIfMissing = true) // 根据配置决定是否注册命令
 public class HelloCommand implements StarBotCommand { // 实现 StarBotCommand 接口，即可被 StarBot 自动注册为命令
+    /**
+     * 示例插件配置类
+     */
+    private final StarBotExampleProperties properties;
+
     /**
      * 命令唯一标识，如不重写此方法，默认为实现类的全路径类名
      */
@@ -60,6 +69,6 @@ public class HelloCommand implements StarBotCommand { // 实现 StarBotCommand �
      */
     @Override
     public void execute(CommandContext context) {
-        context.reply("你好，" + context.getNickname());
+        context.reply(properties.getGreeting() + context.getNickname());
     }
 }

@@ -2,6 +2,8 @@ package com.example;
 
 import com.starlwr.bot.core.message.Message;
 import com.starlwr.bot.core.plugin.StarBotComponent;
+import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -13,15 +15,16 @@ import java.util.List;
 /**
  * 示例 3: 拦截并修改 StarBot 全局默认行为
  * 示例 StarBot 消息推送拦截器
- * 该拦截器会拦截 StarBot 全局消息发送方法，并修改即将要推送的消息内容，为所有中文消息后添加一个 “喵” 后缀
+ * 给推送消息中以中文结尾的每一行加上配置中的后缀
  */
 @Aspect
+@RequiredArgsConstructor // 生成构造函数，供 Spring 注入配置类
 @StarBotComponent // 使用该注解将此类注册为 StarBot 组件，会被 StarBot 扫描并注册至 Spring 容器中
 public class StarBotExampleMeowAdder {
     /**
-     * 要添加的后缀
+     * 示例插件配置类
      */
-    private static final String SUFFIX = "喵";
+    private final StarBotExampleProperties properties;
 
     /**
      * 匹配以中文字符结尾的正则表达式
@@ -36,7 +39,12 @@ public class StarBotExampleMeowAdder {
 
     @Around("sendMethod()")
     public Object aroundSendMethod(ProceedingJoinPoint joinPoint) throws Throwable {
+        // 读取消息后缀，未启用拦截时直接发送原消息
         Object[] args = joinPoint.getArgs();
+        String suffix = properties.getMessageSuffix();
+        if (!properties.isInterceptMessages() || StringUtils.isEmpty(suffix)) { // 根据配置决定是否添加后缀
+            return joinPoint.proceed(args);
+        }
 
         if (args.length > 0 && args[0] instanceof Message message) {
             // 获取原消息内容
@@ -52,7 +60,7 @@ public class StarBotExampleMeowAdder {
             for (String line: lines) {
                 if (line.matches(CHINESE_END_PATTERN)) {
                     // 如果当前行以中文结尾，添加一个后缀
-                    newLines.add(line + SUFFIX);
+                    newLines.add(line + suffix);
                 } else {
                     // 否则不添加后缀
                     newLines.add(line);

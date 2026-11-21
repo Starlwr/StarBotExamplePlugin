@@ -1,0 +1,90 @@
+{
+  "title": "示例插件",
+  "description": "演示 StarBot 插件的事件监听、消息拦截和命令注册，可作为插件开发的参考",
+  "configurationClass": "com.example.StarBotExampleProperties",
+  "basePath": [
+    "starbot",
+    "example"
+  ],
+  "conditions": {
+    "message-intercept-enabled": {
+      "path": [
+        "intercept-messages"
+      ],
+      "op": "=",
+      "value": true
+    },
+    "hello-command-enabled": {
+      "path": [
+        "hello-enabled"
+      ],
+      "op": "=",
+      "value": true
+    }
+  },
+  "groups": [
+    {
+      "id": "events",
+      "title": "事件监听",
+      "description": "控制示例日志的输出，用于观察 StarBot 的事件是否正常送达插件",
+      "fields": [
+        {
+          "key": "startup-log",
+          "label": "输出启动日志",
+          "description": "StarBot 启动完成后输出一条日志，用于确认插件已被加载",
+          "type": "boolean",
+          "restartRequired": true
+        },
+        {
+          "key": "danmu-log",
+          "label": "输出弹幕日志",
+          "description": "收到弹幕时输出发送者和内容，用于确认事件监听是否生效\n需要安装直播平台插件并配置数据源后才会收到弹幕",
+          "type": "boolean"
+        }
+      ]
+    },
+    {
+      "id": "message",
+      "title": "消息拦截",
+      "description": "演示如何统一修改 StarBot 发出的推送消息",
+      "fields": [
+        {
+          "key": "intercept-messages",
+          "label": "全局拦截推送消息",
+          "description": "开启后为推送消息中每行以中文结尾的内容追加后缀",
+          "type": "boolean"
+        },
+        {
+          "key": "message-suffix",
+          "label": "消息后缀",
+          "description": "全局拦截推送消息后添加的后缀内容",
+          "type": "string",
+          "visibleWhen": "message-intercept-enabled",
+          "validateWhen": "message-intercept-enabled"
+        }
+      ]
+    },
+    {
+      "id": "command",
+      "title": "示例命令",
+      "description": "设置示例命令的开关和回复内容",
+      "fields": [
+        {
+          "key": "hello-enabled",
+          "label": "启用示例命令",
+          "description": "提供示例命令，支持「你好」或「hello」触发\n收到命令后回复问候语和发送者昵称",
+          "type": "boolean",
+          "springKey": "starbot.example.hello-enabled"
+        },
+        {
+          "key": "greeting",
+          "label": "问候语",
+          "description": "示例命令回复的问候语",
+          "type": "string",
+          "visibleWhen": "hello-command-enabled",
+          "validateWhen": "hello-command-enabled"
+        }
+      ]
+    }
+  ]
+}
