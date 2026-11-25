@@ -3,7 +3,7 @@
 ![logo](https://bot.starlwr.com/images/static/logo.jpg)
 
 [![Java](https://img.shields.io/badge/Java-17%2B-blue)](https://www.java.com/)
-[![StarBotCore](https://img.shields.io/badge/StarBotCore-3.0.0-blue)](https://github.com/Starlwr/StarBotCore)
+[![StarBotCore](https://img.shields.io/badge/StarBotCore-3.0.0.0-blue)](https://github.com/Starlwr/StarBotCore)
 [![License](https://img.shields.io/badge/License-AGPL--3.0-green)](LICENSE)
 
 **StarBot 3.0 示例插件**
@@ -55,7 +55,7 @@ StarBotExamplePlugin/
 │       └── java/
 │           └── com/example/                                # 测试代码（可选）
 └── target/                                                 # 构建输出目录
-    └── starbot-example-plugin-1.0.0.jar                    # 构建出的插件 JAR
+    └── starbot-example-plugin-1.0.0.0.jar                    # 构建出的插件 JAR
 ```
 
 ## 示例功能
@@ -95,7 +95,7 @@ StarBotExamplePlugin/
 
 每个 StarBot 插件都需要在 `pom.xml` 中定义元数据，这些内容会在插件加载时输出到控制台和日志：
 
-> 2025-11-22 01:58:39.062  INFO 64528 --- [                main] c.s.bot.core.plugin.StarBotPluginLoader  : 已注册插件 StarBotExamplePlugin v1.0.0 --Author: Example Plugin For StarBot
+> 已注册插件 StarBotExamplePlugin v1.0.0.0 --Author: Example Plugin For StarBot
 
 ```xml
 <!-- 组名，通常使用反向域名，必填，与 artifactId 共同构成插件唯一标识 -->
@@ -103,7 +103,7 @@ StarBotExamplePlugin/
 <!-- 插件 ID，必填，与 groupId 共同构成插件唯一标识 -->
 <artifactId>starbot-example-plugin</artifactId>
 <!-- 插件版本，必填，会在插件加载时输出至 StarBot 日志中 -->
-<version>1.0.0</version>
+<version>1.0.0.0</version>
 <!-- 插件名称，必填，会在插件加载时输出至 StarBot 日志中 -->
 <name>StarBotExamplePlugin</name>
 <!-- 插件描述，必填，会在插件加载时输出至 StarBot 日志中 -->
@@ -207,7 +207,7 @@ StarBot 插件使用 Maven 管理依赖。构建时由 Maven 解析依赖，打�
 <dependency>
     <groupId>com.starlwr</groupId>
     <artifactId>starbot-core</artifactId>
-    <version>3.0.0</version>
+    <version>3.0.0.0</version>
 </dependency>
 ```
 
@@ -221,7 +221,7 @@ StarBot 官方插件都发布在 StarBot 官方 Maven 仓库中。保留模板�
 <dependency>
     <groupId>com.starlwr</groupId>
     <artifactId>starbot-bilibili</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.0.0</version>
 </dependency>
 ```
 
@@ -266,7 +266,7 @@ Lombok 只在编译时使用，可以保留模板中的以下配置，它不会�
 mvn clean package
 ```
 
-构建成功后，插件 JAR 会生成在 `target` 目录中，文件名格式为 `{artifactId}-{version}.jar`，例如 `starbot-example-plugin-1.0.0.jar`。
+构建成功后，插件 JAR 会生成在 `target` 目录中，文件名格式为 `{artifactId}-{version}.jar`，例如 `starbot-example-plugin-1.0.0.0.jar`。
 
 ### 部署插件
 
@@ -276,7 +276,7 @@ StarBot 启动时会扫描启动工作目录下的 `plugins` 文件夹。启动�
 2. 在 StarBot 的启动工作目录下找到或创建 `plugins` 文件夹
 3. 把构建好的插件 JAR 复制到该目录；更新已有插件时请移走旧版 JAR，避免同时保留同一插件的多个版本
 4. 启动 StarBot，等待依赖处理和插件加载完成
-5. 检查「已注册插件 StarBotExamplePlugin v1.0.0」和「已加载插件 StarBotExamplePlugin v1.0.0」日志，修改过插件名称或版本时以实际信息为准；命令示例还会输出「已注册 你好 命令: starbot.example.hello」日志，之后可以按[示例功能](#示例功能)中的方式验证
+5. 检查「已注册插件 StarBotExamplePlugin v1.0.0.0」和「已加载插件 StarBotExamplePlugin v1.0.0.0」日志，修改过插件名称或版本时以实际信息为准；命令示例还会输出「已注册 你好 命令: starbot.example.hello」日志，之后可以按[示例功能](#示例功能)中的方式验证
 
 如果当前插件依赖其他插件，请把所需前置插件的 JAR 一并放入 `plugins` 目录。前置插件缺失时，StarBot 会记录「未安装插件 ... 的前置依赖插件 ..., 无法加载该插件」日志，并跳过加载依赖它的插件。
 

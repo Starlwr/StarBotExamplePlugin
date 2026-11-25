@@ -16,7 +16,7 @@
     <!-- 插件 ID，必填，与 groupId 共同构成插件唯一标识 -->
     <artifactId>starbot-example-plugin</artifactId>
     <!-- 插件版本，必填，会在插件加载时输出至 StarBot 日志中 -->
-    <version>1.0.0</version>
+    <version>1.0.0.0</version>
     <!-- 插件名称，必填，会在插件加载时输出至 StarBot 日志中 -->
     <name>StarBotExamplePlugin</name>
     <!-- 插件描述，必填，会在插件加载时输出至 StarBot 日志中 -->
@@ -72,7 +72,7 @@
         <dependency>
             <groupId>com.starlwr</groupId>
             <artifactId>starbot-core</artifactId>
-            <version>3.0.0</version>
+            <version>3.0.0.0</version>
         </dependency>
 
         <!-- 以下为可选依赖，在下方按需引入所需的其他依赖 -->
@@ -97,7 +97,7 @@
             <plugin>
                 <groupId>com.starlwr</groupId>
                 <artifactId>starbot-plugin-processor</artifactId>
-                <version>1.0.0</version>
+                <version>1.0.0.0</version>
                 <executions>
                     <execution>
                         <goals>
