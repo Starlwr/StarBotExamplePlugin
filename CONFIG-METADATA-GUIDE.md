@@ -611,7 +611,7 @@ String suffix = properties.getMessageSuffix();
 
 ## 8. 配置动作
 
-在分组的 `actions` 中声明按钮。动作在正常模式和独立配置中心都能运行，接收当前草稿中的指定参数，不需要先保存或重启。适合检查连接参数、测试连接或预览插件输出。
+在分组的 `actions` 中声明按钮。动作可以接收当前页面草稿中的指定参数，用户可以直接执行，无需先保存或重启。检查连接参数、预览输出等动作可以使用 `handler`，需要访问运行中服务的动作可以使用 `handlerBean`。
 
 ### 动作对象
 
@@ -620,13 +620,18 @@ String suffix = properties.getMessageSuffix();
 | `id` | 是 | 用来在分组内标识这个按钮，例如 `"check-notify"`。同一个分组内不能重复。 |
 | `label` | 是 | 用来填写按钮文字。 |
 | `description` | 否 | 用来填写按钮下方的说明，支持换行。 |
-| `handler` | 是 | 用来指定点击按钮后执行哪个类，填完整类名。这个类需要实现 `ConfigActionHandler`，并提供公开的无参构造方法。 |
+| `handler` | 与 `handlerBean` 二选一 | 填写处理器的完整类名。处理器需实现 `ConfigActionHandler`，并提供公开的无参构造方法。 |
+| `handlerBean` | 与 `handler` 二选一 | 填写 Spring Bean 名称。该 Bean 需实现 `ConfigActionHandler`。 |
 | `synchronous` | 否 | 用来决定点击后是否等待结果。默认 `false`，后台执行，页面再查询结果；为 `true` 时请求会等执行完再返回。 |
 | `parameters` | 否 | 用来声明按钮需要读取哪些配置。每个参数名对应一个参数选择器，写法见[动作参数](#动作参数)。省略或填 `{}` 时，处理器收到空对象。 |
 | `confirmation` | 否 | 用来在点击后弹出确认提示。填非空文本；省略时无需二次确认。 |
 | `visibleWhen` | 否 | 用来控制按钮什么时候显示。条件明确为 `true` 时显示，并在后端执行前复核。 |
 
-StarBot 从类加载器创建处理器，因此处理器不应依赖 Spring 自动注入。需要使用客户端时，可以从收到的参数创建临时客户端，并在动作结束后释放。耗时操作通常使用默认的后台执行方式。配置中心最多同时执行三个动作；同一个按钮在执行期间不会重复启动任务。
+使用 `handler` 时，StarBot 根据类名创建处理器，正常运行和独立配置模式下都可以执行。
+
+使用 `handlerBean` 时，StarBot 按名称从 Spring 容器获取处理器。插件处理器可用 `@StarBotComponent` 注册，并通过构造器注入所需的 Bean。独立配置模式下，满足显示条件的按钮仍会显示，但不可点击，页面会以红色提示「此操作仅在 StarBot 正常运行时可用」。
+
+耗时操作通常使用默认的后台执行方式。配置中心最多同时执行三个动作，同一个按钮在执行期间不会重复启动任务。
 
 处理器的 `execute(JSONObject parameters)` 返回成功提示，返回空白时自动显示「执行成功」。失败时，页面显示异常类名和消息，控制台记录堆栈。不要在异常消息中包含凭据或完整的请求内容。
 
@@ -696,8 +701,59 @@ public class CheckNotifyAction implements ConfigActionHandler {
 
 动作条件引用其他字段时，应把这些字段也纳入参数范围。页面有配置错误或未解决的配置冲突时不会执行按钮；后端会复核动作所需的配置、冲突和启用条件。动作额外要求的值由处理器自行检查。
 
+### 注入 Spring Bean 的按钮
+
+以「查看当前消息后缀」按钮为例。在分组的 `actions` 数组中声明动作，处理器通过构造器注入配置 Bean，读取当前生效的消息后缀。
+
+```json
+{
+  "id": "show-message-suffix",
+  "label": "查看当前消息后缀",
+  "handlerBean": "starBotExampleMessageSuffixAction"
+}
+```
+
+处理器注册后的默认 Bean 名称为 `starBotExampleMessageSuffixAction`。
+
+```java
+package com.example;
+
+import com.alibaba.fastjson2.JSONObject;
+import com.starlwr.bot.core.config.action.ConfigActionHandler;
+import com.starlwr.bot.core.plugin.StarBotComponent;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+
+/**
+ * 消息后缀查看动作
+ */
+@StarBotComponent
+public class StarBotExampleMessageSuffixAction implements ConfigActionHandler {
+    /**
+     * 示例插件配置类
+     */
+    private final StarBotExampleProperties properties;
+
+    @Autowired
+    public StarBotExampleMessageSuffixAction(StarBotExampleProperties properties) {
+        this.properties = properties;
+    }
+
+    /**
+     * 读取当前生效的消息后缀
+     * @param parameters 动作参数
+     * @return 当前消息后缀提示
+     */
+    @Override
+    public String execute(JSONObject parameters) {
+        String suffix = properties.getMessageSuffix();
+        return StringUtils.isEmpty(suffix) ? "当前消息后缀为空" : "当前消息后缀为「" + suffix + "」";
+    }
+}
+```
+
 ## 9. 编写检查
 
 - 文件使用 UTF-8 编码的 JSON，元数据上限为 8 MiB。字段和条件的嵌套校验上限均为 32 层；路径最多 32 段，每段必须是非空字符串。空路径 `[]` 可以表示没有前缀或引用当前作用域；动作参数的 `path` 必须非空。
-- 模块标题、分组 ID 和标题、字段键、`springKey`、动作 ID、按钮文字、处理器类名、确认文字，以及动作参数名和前缀等标识文本，都不能为空白，最长 256 个字符。
+- 模块标题、分组 ID 和标题、字段键、`springKey`、动作 ID、按钮文字、处理器类名或 Bean 名称、确认文字，以及动作参数名和前缀等标识文本，都不能为空白，最长 256 个字符。
 - 打包后确认 JAR 中包含 `plugin.json` 和 `config/config.json`。在配置中心验证初始值、隐藏和必填条件、动作参数、修改与恢复后的 JSON，以及需要重启的标记。

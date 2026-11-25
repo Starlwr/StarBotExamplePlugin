@@ -140,7 +140,7 @@ StarBotExamplePlugin/
 
 `src/main/resources/config/config.json` 描述配置中心的页面，包括分组、字段类型、默认值、校验规则、条件显示、是否需要重启生效，以及页面上的按钮。
 
-字段、条件、校验规则和配置动作的完整写法见 [CONFIG-METADATA-GUIDE.md](CONFIG-METADATA-GUIDE.md)。
+字段、条件、校验规则和配置动作的完整写法见 [配置元数据编写指南](CONFIG-METADATA-GUIDE.md)。
 
 ### 监听配置变更事件
 
